@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Notes Login</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#111827", // Changed to dark/black for high contrast buttons like reference
+                        "primary-hover": "#374151",
+                        "accent": "#3b82f6", // Keep blue for accents/links
+                        "background-main": "#f2f2f4", // Light gray background from reference
+                        "surface-card": "#ffffff",
+                        "text-main": "#0f172a",
+                        "text-sub": "#64748b",
+                        "border-subtle": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px -10px rgba(0, 0, 0, 0.08)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.03)',
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1rem", "2xl": "1.5rem", "3xl": "2rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-background-main font-display text-text-main antialiased h-screen flex flex-col items-center justify-center p-4">
+<div class="w-full max-w-[440px] animate-[fadeIn_0.5s_ease-out]">
+<div class="flex flex-col items-center mb-8">
+<div class="bg-black text-white p-3 rounded-2xl shadow-lg shadow-black/20 mb-4 transform hover:scale-105 transition-transform duration-300">
+<span class="material-symbols-outlined" style="font-size: 32px;">graphic_eq</span>
+</div>
+<h1 class="text-2xl font-bold text-text-main tracking-tight">AI Notes</h1>
+</div>
+<div class="bg-surface-card rounded-3xl shadow-soft p-8 md:p-10 border border-white/60 backdrop-blur-sm">
+<div class="text-center mb-8">
+<h2 class="text-xl font-bold text-text-main mb-1">Welcome back</h2>
+<p class="text-sm text-text-sub font-medium">Please enter your details to sign in.</p>
+</div>
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<div class="space-y-1.5">
+<label class="block text-xs font-bold text-text-main uppercase tracking-wider ml-1" for="email">Email Address</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-sub/60 group-focus-within:text-black transition-colors" style="font-size: 20px;">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-background-main/50 border border-transparent focus:bg-white text-text-main placeholder-text-sub/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black/10 transition-all font-medium sm:text-sm" id="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center justify-between ml-1">
+<label class="block text-xs font-bold text-text-main uppercase tracking-wider" for="password">Password</label>
+<a class="text-xs font-semibold text-accent hover:text-blue-700 transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-sub/60 group-focus-within:text-black transition-colors" style="font-size: 20px;">lock</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-background-main/50 border border-transparent focus:bg-white text-text-main placeholder-text-sub/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black/10 transition-all font-medium sm:text-sm" id="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-black/20 hover:shadow-black/30 transition-all transform active:scale-[0.98] mt-2" type="submit">
+<span>Log In</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</form>
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-gray-100"></div>
+</div>
+<div class="relative flex justify-center text-xs uppercase tracking-wider">
+<span class="px-3 bg-surface-card text-text-sub font-semibold">Or continue with</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2.5 px-4 py-3 bg-white border border-border-subtle rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all font-semibold text-text-main text-sm shadow-sm hover:shadow group">
+<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.766 12.2764C23.766 11.4607 23.6999 10.6406 23.5588 9.83807H12.24V14.4591H18.7217C18.4528 15.9494 17.5885 17.2678 16.323 18.1056V21.1039H20.19C22.4608 19.0139 23.766 15.9274 23.766 12.2764Z" fill="#4285F4"></path><path d="M12.24 24.0008C15.4766 24.0008 18.2059 22.9382 20.19 21.1039L16.323 18.1056C15.2517 18.8375 13.8627 19.252 12.2445 19.252C9.11388 19.252 6.45946 17.1399 5.50705 14.3003H1.5166V17.3912C3.55371 21.4434 7.7029 24.0008 12.24 24.0008Z" fill="#34A853"></path><path d="M5.50253 14.3003C4.99987 12.8099 4.99987 11.1961 5.50253 9.70575V6.61481H1.5166C-0.18551 10.0056 -0.18551 14.0004 1.5166 17.3912L5.50253 14.3003Z" fill="#FBBC05"></path><path d="M12.24 4.74966C13.9509 4.7232 15.6044 5.36697 16.8434 6.54867L20.2695 3.12262C18.1001 1.0855 15.2208 -0.034466 12.24 0.000808666C7.7029 0.000808666 3.55371 2.55822 1.5166 6.61481L5.50253 9.70575C6.45064 6.86173 9.10947 4.74966 12.24 4.74966Z" fill="#EA4335"></path></svg>
+<span>Google</span>
+</button>
+<button class="flex items-center justify-center gap-2.5 px-4 py-3 bg-white border border-border-subtle rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all font-semibold text-text-main text-sm shadow-sm hover:shadow group">
+<svg class="w-5 h-5" fill="none" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg"><path d="M0 0H10.9092V10.9092H0V0Z" fill="#F25022"></path><path d="M12.0908 0H23V10.9092H12.0908V0Z" fill="#7FBA00"></path><path d="M0 12.0908H10.9092V23H0V12.0908Z" fill="#00A4EF"></path><path d="M12.0908 12.0908H23V23H12.0908V12.0908Z" fill="#FFB900"></path></svg>
+<span>Microsoft</span>
+</button>
+</div>
+</div>
+<p class="mt-8 text-center text-sm text-text-sub font-medium">
+            Don't have an account? 
+            <a class="font-bold text-text-main hover:text-accent transition-colors" href="#">Sign up for free</a>
+</p>
+</div>
+
+</body></html>
