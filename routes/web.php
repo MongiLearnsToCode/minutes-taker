@@ -10,6 +10,17 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('/debug-auth/{id?}', function ($id = null) {
+    return [
+        'user_id' => auth()->id(),
+        'session_id' => session()->getId(),
+        'ip' => request()->ip(),
+        'app_url' => config('app.url'),
+        'meeting_status' => $id ? \App\Models\Meeting::find($id)?->status : 'no_id',
+        'meeting_user_id' => $id ? \App\Models\Meeting::find($id)?->user_id : 'no_id',
+    ];
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [App\Http\Controllers\MeetingController::class, 'index'])->name('dashboard');
 
