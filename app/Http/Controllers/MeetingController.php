@@ -78,6 +78,8 @@ class MeetingController extends Controller
 
     public function show(string $id)
     {
+        \Illuminate\Support\Facades\Log::info("MeetingController@show hit for ID: {$id}. User: " . (request()->user() ? request()->user()->id : 'guest'));
+
         $meeting = \App\Models\Meeting::with('actionItems')
             ->where('user_id', request()->user()->id)
             ->findOrFail($id);

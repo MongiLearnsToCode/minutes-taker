@@ -18,15 +18,11 @@ import {
     Copy,
     Download,
     FileText,
-    Play,
-    PlayCircle,
-    PlusCircle,
     Search,
     Sparkles,
-    Timer,
     Trash2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ActionItem {
     id: number;
@@ -57,12 +53,21 @@ export default function Show({
     const { stop } = usePoll(3000, {
         only: ['meeting'],
         keepAlive: true,
+        onError: (errors) => {
+            console.error('Polling error:', errors);
+            // Optionally stop on error to prevent loops, but keep trying for now unless 404
+            if (Object.keys(errors).length > 0) {
+                // console.log("Stopping poll due to error");
+                // stop();
+            }
+        }
     });
 
-    // Stop polling when not processing
-    if (meeting.status === 'completed' || meeting.status === 'failed') {
-        stop();
-    }
+    useEffect(() => {
+        if (meeting.status === 'completed' || meeting.status === 'failed') {
+            stop();
+        }
+    }, [meeting.status, stop]);
 
     const copyToClipboard = () => {
         const text = `Meeting: ${meeting.title}\nDate: ${new Date(meeting.created_at).toLocaleDateString()}\n\nSummary:\n${meeting.summary}\n\nAction Items:\n${meeting.action_items.map((i) => `- ${i.content}`).join('\n')}\n\nTranscript:\n${meeting.transcription}`;
@@ -108,21 +113,6 @@ export default function Show({
             });
         }
     };
-
-    // Placeholder data for UI elements not yet in DB
-    const participants = [
-        'https://ui-avatars.com/api/?name=Sarah+Connor&background=random',
-        'https://ui-avatars.com/api/?name=John+Doe&background=random',
-        'https://ui-avatars.com/api/?name=Jane+Smith&background=random',
-    ];
-
-    const tags = [
-        '#Q4 Roadmap',
-        '#AI Module',
-        '#Mobile App',
-        '#Budgeting',
-        '#Jira',
-    ];
 
     return (
         <MainLayout>
@@ -180,9 +170,6 @@ export default function Show({
                                             .toUpperCase() +
                                         meeting.status.slice(1)}
                                 </span>
-                                <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-medium text-text-sub ring-1 ring-gray-200 ring-inset">
-                                    Product Team
-                                </span>
                             </div>
 
                             <div className="flex items-center gap-6 text-sm text-text-sub">
@@ -198,34 +185,13 @@ export default function Show({
                                         {formatTime(meeting.created_at)}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Timer className="h-4 w-4" />
-                                    <span>45m 12s</span> {/* Placeholder */}
-                                </div>
                             </div>
 
                             {/* Audio Player Visualizer */}
                             {audio_url ? (
-                                <div className="mt-6 flex max-w-2xl items-center gap-4 rounded-2xl border border-border-subtle/40 bg-gray-50 p-4">
-                                    <button className="flex h-10 w-10 shrink-0 transform items-center justify-center rounded-full bg-black text-white shadow-lg shadow-black/20 transition-transform hover:scale-105">
-                                        <PlayCircle className="h-5 w-5 fill-current" />
-                                    </button>
-                                    <div className="flex h-8 flex-1 items-center gap-1 opacity-60">
-                                        {/* Mock visualizer bars */}
-                                        {[
-                                            3, 5, 4, 6, 8, 5, 3, 5, 7, 4, 6, 3,
-                                            5, 2, 4, 6, 8, 5, 3, 4, 2, 3,
-                                        ].map((h, i) => (
-                                            <div
-                                                key={i}
-                                                className={`w-1 rounded-full ${i === 16 ? 'bg-accent-custom' : 'bg-primary-custom'}`}
-                                                style={{ height: `${h * 4}px` }}
-                                            ></div>
-                                        ))}
-                                    </div>
-                                    <span className="font-mono text-xs text-text-sub">
-                                        12:34 / 45:12
-                                    </span>
+                                <div className="mt-6 flex max-w-2xl flex-col items-start gap-2 rounded-2xl border border-border-subtle/40 bg-gray-50 p-4">
+                                    <span className="text-xs font-semibold text-text-sub uppercase tracking-wider">Audio Recording</span>
+                                    <audio controls src={audio_url} className="w-full h-10" />
                                 </div>
                             ) : (
                                 <div className="mt-6 flex max-w-2xl items-center gap-4 rounded-2xl border border-border-subtle/40 bg-gray-50 p-4">
@@ -234,31 +200,6 @@ export default function Show({
                                     </span>
                                 </div>
                             )}
-                        </div>
-
-                        {/* Participants Section */}
-                        <div className="flex min-w-[200px] flex-col items-start gap-4 md:items-end">
-                            <h3 className="text-xs font-semibold tracking-wider text-text-sub uppercase">
-                                Participants
-                            </h3>
-                            <div className="flex -space-x-3">
-                                {participants.map((src, i) => (
-                                    <div
-                                        key={i}
-                                        className="h-10 w-10 rounded-full bg-cover bg-center shadow-sm ring-2 ring-white"
-                                        style={{
-                                            backgroundImage: `url('${src}')`,
-                                        }}
-                                    ></div>
-                                ))}
-                                <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-text-sub shadow-sm ring-2 ring-white transition-colors hover:bg-gray-200">
-                                    +2
-                                </div>
-                            </div>
-                            <button className="mt-1 flex items-center gap-1 text-sm font-medium text-accent-custom hover:underline">
-                                <PlusCircle className="h-4 w-4" />
-                                Add participant
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -291,35 +232,12 @@ export default function Show({
                                                 key={idx}
                                                 className="group flex gap-4"
                                             >
-                                                <div className="mt-1 shrink-0">
-                                                    <div
-                                                        className="h-8 w-8 rounded-full bg-cover bg-center shadow-sm"
-                                                        style={{
-                                                            backgroundImage: `url('${participants[idx % participants.length]}')`,
-                                                        }}
-                                                    ></div>
-                                                </div>
                                                 <div className="flex-1">
-                                                    <div className="mb-1 flex items-center gap-2">
-                                                        <span className="text-sm font-bold text-text-main">
-                                                            Speaker {idx + 1}
-                                                        </span>
-                                                        <span className="font-mono text-xs text-text-sub">
-                                                            00:
-                                                            {idx * 15 < 10
-                                                                ? '0'
-                                                                : ''}
-                                                            {idx * 15}
-                                                        </span>
-                                                    </div>
                                                     <p className="leading-relaxed text-text-main">
                                                         {paragraph}
                                                     </p>
                                                 </div>
                                                 <div className="flex flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                                                    <button className="rounded p-1 text-text-sub hover:bg-gray-100 hover:text-black">
-                                                        <Play className="h-4 w-4" />
-                                                    </button>
                                                     <button className="rounded p-1 text-text-sub hover:bg-gray-100 hover:text-black">
                                                         <Copy className="h-4 w-4" />
                                                     </button>
@@ -387,45 +305,11 @@ export default function Show({
                                                 {item.content}
                                             </span>
                                         </label>
-                                        <div className="mb-1 pl-7">
-                                            <div className="flex items-center gap-1.5">
-                                                <img
-                                                    className="h-4 w-4 rounded-full"
-                                                    src={
-                                                        participants[
-                                                        idx %
-                                                        participants.length
-                                                        ]
-                                                    }
-                                                    alt="Assignee"
-                                                />
-                                                <span className="text-xs text-text-sub">
-                                                    Assigned to User {idx + 1}
-                                                </span>
-                                            </div>
-                                        </div>
                                     </div>
                                 ))}
                                 <button className="mt-4 w-full rounded-xl border border-dashed border-gray-300 py-2 text-sm font-medium text-text-sub transition-colors hover:bg-gray-50 hover:text-black">
                                     + Add manual item
                                 </button>
-                            </div>
-                        </div>
-
-                        {/* Key Topics Card */}
-                        <div className="rounded-3xl border border-transparent bg-surface-card p-6 shadow-soft transition-colors hover:border-border-subtle/50">
-                            <h3 className="mb-4 text-sm font-bold tracking-wider text-text-sub uppercase">
-                                Key Topics
-                            </h3>
-                            <div className="flex flex-wrap gap-2">
-                                {tags.map((tag) => (
-                                    <span
-                                        key={tag}
-                                        className="cursor-pointer rounded-lg border border-gray-100 bg-gray-50 px-3 py-1.5 text-xs font-medium text-text-main hover:bg-gray-100"
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
                             </div>
                         </div>
                     </div>
